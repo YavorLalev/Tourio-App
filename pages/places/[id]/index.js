@@ -36,9 +36,10 @@ export default function DetailsPage() {
   const { data: place, isLoading, error } = useSWR(`/api/places/${id}`);
 
   if (!isReady || isLoading || error) return <h2>Loading...</h2>;
+  const { name, image, location, mapURL, description } = place;
 
   async function deletePlace() {
-    const confirmation = confirm(`Do you really want to delete ${place.name}?`);
+    const confirmation = confirm(`Do you really want to delete ${name}?`);
     if (confirmation) {
       const response = await fetch(`/api/places/${id}`, {
         method: "DELETE",
@@ -57,7 +58,7 @@ export default function DetailsPage() {
       </Link>
       <ImageContainer>
         <StyledImage
-          src={place.image}
+          src={image}
           priority
           fill
           sizes="(max-width: 768px) 100vw,
@@ -67,12 +68,12 @@ export default function DetailsPage() {
         />
       </ImageContainer>
       <h2>
-        {place.name}, {place.location}
+        {name}, {location}
       </h2>
-      <Link href={place.mapURL} passHref legacyBehavior>
+      <Link href={mapURL} passHref legacyBehavior>
         <StyledLink $variant="outlined">Location on Google Maps</StyledLink>
       </Link>
-      <p>{place.description}</p>
+      <p>{description}</p>
       <ButtonContainer>
         <Link href={`/places/${id}/edit`} passHref legacyBehavior>
           <StyledLink>Edit</StyledLink>
